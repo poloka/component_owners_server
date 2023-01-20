@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
-source 'https://cernerrepos.net/api/gems/rubygems'
-
-SNAPSHOT_REPO = 'http://repo.snapshot.cerner.corp/rubygems'
-NIGHTLY_REPO = 'http://repo.nightly.cerner.corp/rubygems'
+source 'https://rubygems.org'
 
 gem 'bootstrap', '~> 5.2'
 gem 'bootsnap', '>= 1.1.0', require: false
