@@ -17,6 +17,12 @@
 !/log/.keep
 !/tmp/.keep
 
+spec/internal/log
+/public/assets
+
+# Ignore coverage data
+/coverage
+
 # Ignore uploaded files in development
 /storage/*
 !/storage/.keep
@@ -26,6 +32,9 @@
 
 /public/assets
 .byebug_history
+
+.DS_Store
+.idea
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
