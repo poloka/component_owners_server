@@ -1,0 +1,35 @@
+<div class="container-fluid">
+  <h1>Components</h1>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Url</th>
+        <th>Owner</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @components.each do |component| %>
+        <tr>
+          <td>
+            <%= component.name %>
+          </td>      
+          <td>
+            <%= my_link_to(component.url) %>
+          </td>
+          <td>
+            <%= component.user&.display_name %>
+          </td>
+          <td>
+            <%= link_to 'Show', component, class:"btn btn-light min-width-btn" %>
+            <%= link_to 'Edit', edit_component_path(component),class:"btn btn-primary min-width-btn"  %>     
+            <%= link_to 'Delete', component, method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-danger min-width-btn"%>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <br>
+  <%= link_to 'New Component', new_component_path,class:"btn btn-success min-width-btn" %>
+</div>

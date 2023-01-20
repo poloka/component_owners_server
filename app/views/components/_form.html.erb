@@ -1,0 +1,28 @@
+<%= form_with(model: component, local: true) do |form| %>
+  <% if component.errors.any? %>
+    <div id="error_explanation" class="alert alert-danger" role="alert">
+      <h5><%= pluralize(component.errors.count, "error") %> prohibited this component from being saved:</h5>
+      <ul>
+      <% component.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="form-group">
+    <%= form.label :name %>
+    <%= form.text_field :name,class:"form-control"%>
+  </div>
+  <div class="form-group">
+    <%= form.label :url %>
+    <%= form.text_field :url,class:"form-control"%>
+  </div>
+  <div class="form-group">
+    <%= form.label :user %>
+<!--    <div class="field"><%#= form.collection_select(:user_id, User.all, :id, :username, {include_blank: true}, {class: 'dropdown-menu'}) %></div>-->
+    <%= form.collection_select(:user_id, User.all.sort_by { |x| x.display_name.downcase }, :id, :display_name, { include_blank: true }, { class: 'form-control' }) %>
+  </div>
+  <div class="actions">
+    <%= form.submit "Save", class:"btn btn-success min-width-btn" %>
+  </div>
+<% end %>

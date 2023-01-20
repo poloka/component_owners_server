@@ -1,0 +1,86 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'fileutils'
+require 'pathname'
+include FileUtils
+
+class Project
+  # path to your application root.
+  ROOT = Pathname.pwd.freeze
+
+  BUNDLER_JOBS    = 4
+  BUNDLER_RETRIES = 3
+
+  class << self
+    def setup(args)
+      chdir do
+        install
+        database
+        assets
+        npm  
+      end
+      true
+    end
+
+    def install
+      bundle_check || bundle_install || raise('Cannot finish gem installation')
+    end
+
+    def database
+      if File.exist?(File.join(ROOT, 'config', 'database.yml'))
+        puts '== Creating database =='
+        system! "bundle exec rake db:create db:migrate db:seed"
+      end
+    end
+
+    def assets
+      system! "RAILS_ENV=development bundle exec rake assets:precompile"
+    end
+
+    def npm
+      if File.exist?(File.join(ROOT, 'package.json'))
+        system! 'npm install'
+        system! 'npm run build:development'
+      end
+    end
+
+    # Check if current bundle is already usable
+    #
+    # @return [Boolean]
+    def bundle_check
+      system('bundle check')
+    end
+
+    # Install the current bundle
+    #
+    # @return [Boolean]
+    #   the success of the installation
+    def bundle_install
+      puts '== Installing dependencies =='
+      system!("bundle install --jobs=#{BUNDLER_JOBS} --retry=#{BUNDLER_RETRIES}")
+    end
+
+    # Change to subproject directory and execute block
+    #
+    # @return [undefined]
+    def chdir(&block)
+      Dir.chdir(ROOT, &block)
+    end
+
+    # Check if current bundle is already usable
+    #
+    # @return [Boolean]
+    def bundle_check
+      system('bundle check')
+    end
+
+    private
+
+    def system!(*args)
+      system(*args) || abort("\n== Command #{args} failed ==")
+    end    
+  end
+end
+
+exit Project.setup(ARGV)
